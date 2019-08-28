@@ -3,7 +3,7 @@ homeassistant:
   name: Home
   # Location required to calculate the time the sun rises and sets
   latitude: !secret latitude
-  longitude: !secret longitude 8.4736
+  longitude: !secret longitude
   # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: !secret elevation
   # metric for Metric, imperial for Imperial
@@ -214,7 +214,7 @@ fritzbox:
 device_tracker:
   - platform: fritz
     host: !secret fritzbox_ip
-    username: !secretfritzbox_user 
+    username: !secret fritzbox_user 
     password: !secret fritzbox_pw
     new_device_defaults:
       track_new_devices: false
