@@ -1,0 +1,8 @@
+binary_sensor.anbautur:
+  device_class: door
+
+sensor.waschmaschine_status:
+  icon: mdi:washing-machine
+
+sensor.waschmaschine_aktuell:
+  icon: mdi:flash

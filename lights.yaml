@@ -1,0 +1,98 @@
+- platform: mqtt
+  name: "Goldene Lampe"
+  command_topic: "homie/eg_anbau_goldene_lampe/relay/on/set"
+  state_topic: "homie/eg_anbau_goldene_lampe/relay/on"
+  payload_on: "true"
+  payload_off: "false"
+  availability_topic: "homie/eg_anbau_goldene_lampe/$online"
+  payload_available: "true"
+  payload_not_available: "false"
+  retain: true
+
+- platform: mqtt
+  name: "Lichterkette außen"
+  state_topic: "stat/aussen_lichterkette/POWER"
+  command_topic: "cmnd/aussen_lichterkette/POWER"
+  payload_on: "ON"
+  payload_off: "OFF"
+  availability_topic: "tele/aussen_lichterkette/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  retain: true
+
+- platform: mqtt
+  name: "Lichterkette"
+  state_topic: "stat/eg_anbau_lichterkette/POWER"
+  command_topic: "cmnd/eg_anbau_lichterkette/POWER"
+  payload_on: "ON"
+  payload_off: "OFF"
+  availability_topic: "tele/eg_anbau_lichterkette/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  retain: true
+
+- platform: mqtt
+  name: "RGB Dachstuhl" 
+  state_topic: dg-h801/relay/0
+  command_topic: dg-h801/relay/0/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: dg-h801/status
+  payload_available: 1
+  payload_not_available: 0
+  brightness_state_topic: dg-h801/brightness
+  brightness_command_topic: dg-h801/brightness/set
+  rgb_state_topic: dg-h801/rgb
+  rgb_command_topic: dg-h801/rgb/set
+  color_temp_command_topic: dg-h801/mired/set
+#  white_value_state_topic: dg-h801/channel/3
+#  white_value_command_topic: dg-h801/channel/3/set 
+
+- platform: mqtt
+  name: "RGB Wohnzimmer" 
+  state_topic: eg-wohnzimmer-h801/relay/0
+  command_topic: eg-wohnzimmer-h801/relay/0/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: eg-wohnzimmer-h801/status
+  payload_available: 1
+  payload_not_available: 0
+  brightness_state_topic: eg-wohnzimmer-h801/brightness
+  brightness_command_topic: eg-wohnzimmer-h801/brightness/set
+  rgb_state_topic: eg-wohnzimmer-h801/rgb
+  rgb_command_topic: eg-wohnzimmer-h801/rgb/set
+  color_temp_command_topic: eg-wohnzimmer-h801/mired/set
+#  white_value_state_topic: eg-wohnzimmer-h801/channel/3
+#  white_value_command_topic: eg-wohnzimmer-h801/channel/3/set
+
+- platform: mqtt
+  name: "RGB Test"
+  state_topic: "stat/test_h801_tasmota/RESULT"
+  command_topic: "cmnd/test_h801_tasmota/POWER"
+  state_value_template: "{{ value_json.POWER }}"
+  brightness_state_topic: "stat/test_h801_tasmota/RESULT"
+  brightness_command_topic: "cmnd/test_h801_tasmota/Dimmer"
+  brightness_scale: 100
+  brightness_value_template: "{{ value_json.Dimmer }}"
+  rgb_state_topic: "stat/test_h801_tasmota/RESULT"
+  rgb_command_topic: "cmnd/test_h801_tasmota/Color2"
+  rgb_command_template: "{{ '%02x%02x%02x' | format(red, green, blue)}}"
+  rgb_value_template: "{% if value_json.Channel%}{{(value_json.Channel[0]*2.55)|int}},{{(value_json.Channel[1]*2.55)|int}},{{(value_json.Channel[2]*2.55)|int}}{%endif%}"
+  effect_state_topic: "stat/test_h801_tasmota/RESULT"
+  effect_command_topic: "cmnd/test_h801_tasmota/Scheme"
+  effect_value_template: "{{ value_json.Scheme }}"
+  effect_list:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+  availability_topic: "tele/test_h801_tasmota/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  qos: 1
+  payload_on: "ON"
+  payload_off: "OFF"
+  optimistic: false
+  retain: true
+

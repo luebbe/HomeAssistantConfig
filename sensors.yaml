@@ -1,0 +1,136 @@
+#- platform: openweathermap
+#  api_key: !secret openweathermap_api_key
+#  lang: de
+#  monitored_conditions:
+#    - weather
+
+# Außen
+- platform: mqtt
+  name: "Außen Temp"
+  state_topic: "homie/kg_anbau/outdoor/temperature"
+  unit_of_measurement: "°C"
+  availability_topic: "homie/kg_anbau/outdoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+- platform: mqtt
+  name: "Außen rH" 
+  state_topic: "homie/kg_anbau/outdoor/humidity"
+  unit_of_measurement: "%"
+  availability_topic: "homie/kg_anbau/outdoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+- platform: mqtt
+  name: "Außen Luftdruck"
+  state_topic: "homie/kg_anbau/outdoor/pressure"
+  unit_of_measurement: "hPa"
+  availability_topic: "homie/kg_anbau/outdoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+
+# Keller
+- platform: mqtt
+  name: "Keller Temp"
+  state_topic: "homie/kg_anbau/indoor/temperature"
+  unit_of_measurement: "°C"
+  availability_topic: "homie/kg_anbau/indoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+- platform: mqtt
+  name: "Keller rH"
+  state_topic: "homie/kg_anbau/indoor/humidity"
+  unit_of_measurement: "%"
+  availability_topic: "homie/kg_anbau/indoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+
+# Anbau
+- platform: mqtt
+  name: "Anbau Temp"
+  unique_id: anbau_temp
+  state_topic: "homie/eg_anbau_goldene_lampe/dht22/temperature"
+  unit_of_measurement: "°C"
+  availability_topic: "homie/eg_anbau_goldene_lampe/dht22/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+- platform: mqtt
+  name: "Anbau rH"
+  unique_id: anbau_humidity
+  state_topic: "homie/eg_anbau_goldene_lampe/dht22/humidity"
+  unit_of_measurement: "%"
+  availability_topic: "homie/eg_anbau_goldene_lampe/dht22/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+
+# Dachstuhl
+- platform: mqtt
+  name: "Dachstuhl Temp"
+  unique_id: dachstuhl_temp
+  state_topic: "homie/dg_dht22/indoor/temperature"
+  unit_of_measurement: "°C"
+  availability_topic: "homie/dg_dht22/indoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+- platform: mqtt
+  name: "Dachstuhl rH"
+  unique_id: dachstuhl_humidity
+  state_topic: "homie/dg_dht22/indoor/humidity"
+  unit_of_measurement: "%"
+  availability_topic: "homie/dg_dht22/indoor/status"
+  payload_available: "ok"
+  payload_not_available: "error"
+
+########################################
+# Waschmaschine (Sonoff Pow)           #
+########################################
+
+- platform: mqtt
+  name: "Waschmaschine Verbrauch"
+  state_topic: "tele/eg_waschmaschine/SENSOR"
+  value_template: '{{ value_json["ENERGY"]["Today"] }}'
+  unit_of_measurement: "kWh"
+- platform: mqtt
+  name: "Waschmaschine Aktuell"
+  state_topic: "tele/eg_waschmaschine/SENSOR"
+  value_template: '{{ value_json["ENERGY"]["Power"] }}'
+  unit_of_measurement: "W"
+- platform: mqtt
+  name: "Waschmaschine Intervall"
+  state_topic: "tele/eg_waschmaschine/SENSOR"
+  value_template: '{{ value_json["ENERGY"]["Period"] }}'
+  unit_of_measurement: "Wh"
+#- platform: mqtt
+#  name: "Waschmaschine Spannung"
+#  state_topic: "tele/eg_waschmaschine/SENSOR"
+#  value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+#  unit_of_measurement: "V"
+#- platform: mqtt
+#  name: "Waschmaschine Strom"
+#  state_topic: "tele/eg_waschmaschine/SENSOR"
+#  value_template: '{{ value_json["ENERGY"]["Current"] }}'
+#  unit_of_measurement: "A"
+
+- platform: statistics
+  name: "Waschmaschine" 
+  entity_id: sensor.waschmaschine_aktuell
+  max_age:
+    minutes: 5
+
+- platform: template
+  sensors:
+    waschmaschine_status:
+      value_template: '{{ states.input_select.washing_machine_status.state}}'
+      friendly_name: 'Status Waschmaschine'
+
+################################################
+## Dachstuhl lüften
+################################################
+
+- platform: template
+  sensors:
+    delta_temp_aussen_dach:
+      friendly_name: 'Temperaturdifferenz außen - Dachstuhl'
+      value_template: '{{ ((float(states.sensor.aussen_temp.state)) - (float(states.sensor.dachstuhl_temp.state))) | round(2) }}' 
+      unit_of_measurement: '°C'
+      icon_template: "mdi:thermometer"
+
+

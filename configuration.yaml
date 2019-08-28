@@ -1,0 +1,221 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude 8.4736
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Berlin
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+# introduction:
+
+# Enables the frontend
+frontend:
+
+# Information about system and components
+system_health:
+
+system_log:
+  max_entries: 50
+
+# Enable python scripts
+python_script:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Define which data shall be recorded
+recorder:
+  purge_keep_days: 1
+  purge_interval: 1
+  include:
+    domains:
+      - sensor
+      - switch
+      - device
+  exclude:
+    entities:
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_bytes_received
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_bytes_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_kbyte_sec_received
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_kbyte_sec_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_received
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_sec_received
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_sec_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_sent
+
+#    domains:
+#      - automation
+#      - group
+#      - history_graph
+#      - updater
+#      - weblink
+#      - zone
+#    entities:
+#      - sun.sun # Don't record sun data
+#      - sensor.last_boot # Comes from 'systemmonitor' sensor platform
+#      - sensor.date
+
+# Enables support for tracking state changes over time
+history:
+  exclude:
+    domains:
+      - group
+      - input_select
+      - history_graph
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Get weather forecast
+weather:
+  - platform: openweathermap
+    api_key: !secret owm_api_key
+    mode: hourly
+
+# Text to speech
+tts:
+  - platform: google_translate
+    service_name: google_say
+
+# Cloud
+# cloud:
+
+# MQTT
+mqtt:
+  broker: !secret mqtt_broker_ip
+  port: 1883                     # default
+
+################################################
+## Telegram Bot
+################################################
+
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_chat_id_user1     
+      - !secret telegram_chat_id_user2    
+      - !secret telegram_chat_id_all
+
+################################################
+## Notify
+################################################
+
+notify:
+  - name: "user1"
+    platform: telegram
+    chat_id: !secret telegram_chat_id_user1
+  - name: "user2"
+    platform: telegram
+    chat_id: !secret telegram_chat_id_user2
+  - name: "all"
+    platform: telegram
+    chat_id: !secret telegram_chat_id_all
+
+################################################
+## Eingabefelder zum Speichern von Status 
+################################################
+
+input_select:
+  washing_machine_status:
+    name: Status Waschmaschine Input
+    options:
+      - Aus
+      - Leerlauf
+      - Wäscht
+#      - Endphase
+      - Fertig
+    initial: Aus
+
+  dachstuhl_fenster:
+    name: Dachstuhlfenster
+    options:
+      - geschlossen
+      - offen
+    initial: geschlossen
+
+################################################
+## Includes
+################################################
+
+# All sensors
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+
+# All (light) switches
+light: !include lights.yaml
+switch: !include switches.yaml
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+history_graph:
+  grtemperatur:
+    name: Temperatur
+    entities:
+      - sensor.anbau_temp
+      - sensor.aussen_temp
+      - sensor.dachstuhl_temp
+      - sensor.keller_temp
+  grluftfeuchtigkeit:
+    name: Luftfeuchtigkeit 
+    entities:
+      - sensor.anbau_rh
+      - sensor.aussen_rh
+      - sensor.dachstuhl_rh
+      - sensor.keller_rh
+  grluftdruck:
+    name: Luftdruck
+    entities:
+      - sensor.aussen_luftdruck
+
+fritzbox:
+  devices:
+    - host: !secret fritzbox_ip
+      username: !secret fritzbox_user 
+      password: !secret fritzbox_pw
+
+device_tracker:
+  - platform: fritz
+    host: !secret fritzbox_ip
+    username: !secretfritzbox_user 
+    password: !secret fritzbox_pw
+    new_device_defaults:
+      track_new_devices: false
+      hide_if_away: false

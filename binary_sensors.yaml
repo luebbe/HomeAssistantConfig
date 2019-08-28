@@ -1,0 +1,5 @@
+- platform: mqtt
+  name: "Anbautür"
+  state_topic: "homie/kg_anbau/pulse/active"
+  payload_on: "true"
+  payload_off: "false"

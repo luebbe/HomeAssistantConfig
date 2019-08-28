@@ -1,0 +1,10 @@
+- platform: mqtt
+  name: "Waschmaschine Schalter"
+  state_topic: "stat/eg_waschmaschine/POWER"
+  command_topic: "cmnd/eg_waschmaschine/POWER"
+  availability_topic: "tele/eg_waschmaschine/LWT"
+  payload_on: "ON"
+  payload_off: "OFF"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  retain: true
