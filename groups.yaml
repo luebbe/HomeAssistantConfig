@@ -34,7 +34,7 @@ waschmaschine:
   entities:
     - sensor.waschmaschine_verbrauch
     - sensor.waschmaschine_aktuell
-    - sensor.waschmaschine_mean
+    - sensor.waschmaschine_statistik
     - sensor.waschmaschine_status
 
 dachstuhl:

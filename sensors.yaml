@@ -110,7 +110,7 @@
 #  unit_of_measurement: "A"
 
 - platform: statistics
-  name: "Waschmaschine" 
+  name: "Waschmaschine Statistik" 
   entity_id: sensor.waschmaschine_aktuell
   max_age:
     minutes: 5
