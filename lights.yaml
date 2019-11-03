@@ -4,9 +4,9 @@
   state_topic: "homie/eg_anbau_goldene_lampe/relay/on"
   payload_on: "true"
   payload_off: "false"
-  availability_topic: "homie/eg_anbau_goldene_lampe/$online"
-  payload_available: "true"
-  payload_not_available: "false"
+  availability_topic: "homie/eg_anbau_goldene_lampe/$state"
+  payload_available: "ready"
+  payload_not_available: "lost"
   retain: true
 
 - platform: mqtt

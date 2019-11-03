@@ -347,8 +347,8 @@
     condition: and 
     conditions:
       - condition: numeric_state
-        entity_id: sensor.dachstuhl_temp 
-        above: 23
+        entity_id: sensor.aussen_temp 
+        above: 21
       - condition: state
         entity_id: input_select.dachstuhl_fenster
         state: geschlossen
@@ -374,8 +374,8 @@
     condition: and 
     conditions:
       - condition: numeric_state
-        entity_id: sensor.dachstuhl_temp 
-        above: 23
+        entity_id: sensor.aussen_temp 
+        above: 21
       - condition: state
         entity_id: input_select.dachstuhl_fenster
         state: offen
