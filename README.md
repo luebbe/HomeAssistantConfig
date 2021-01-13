@@ -1,3 +1,2 @@
 # HomeAssistantConfig
-Home Assistant Configuration
-[![Travis](https://img.shields.io/travis/luebbe/HomeAssistantConfig.svg?branch=master&style=flat-square)](https://travis-ci.org/luebbe/HomeAssistantConfig)
+Home Assistant Configuration ![Check](https://github.com/luebbe/HomeAssistantConfig/workflows/Check/badge.svg)
