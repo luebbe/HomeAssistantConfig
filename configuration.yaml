@@ -18,6 +18,7 @@ homeassistant:
 
 # Enables the frontend
 frontend:
+  themes: !include_dir_merge_named themes
 
 # Information about system and components
 system_health:
@@ -55,27 +56,31 @@ conversation:
 # Define which data shall be recorded
 recorder:
   purge_keep_days: 1
-  purge_interval: 1
   include:
     domains:
+      - binary_sensor
       - sensor
       - switch
       - device
+      - updater
   exclude:
     entities:
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_bytes_received
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_bytes_sent
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_kbyte_sec_received
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_kbyte_sec_sent
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_received
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_sec_received
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_sec_sent
-      - sensor.internetgatewaydevicev2_fritz_box_6490_cable_packets_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_bytes_received
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_bytes_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_kbyte_sec_received
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_kbyte_sec_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_packets_received
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_packets_sec_received
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_packets_sec_sent
+      - sensor.internetgatewaydevicev2_fritz_box_6591_cable_lgi_packets_sent
+      - sensor.ventil_1_timeout
+      - sensor.ventil_2_timeout
+      - sensor.ventil_3_timeout
+      - sensor.ventil_4_timeout
 
 #    domains:
 #      - automation
 #      - group
-#      - history_graph
 #      - updater
 #      - weblink
 #      - zone
@@ -90,7 +95,6 @@ history:
     domains:
       - group
       - input_select
-      - history_graph
 
 # View all events in a logbook
 logbook:
@@ -102,10 +106,10 @@ map:
 sun:
 
 # Get weather forecast
-weather:
-  - platform: openweathermap
-    api_key: !secret owm_api_key
-    mode: hourly
+#weather:
+#  - platform: openweathermap
+#    api_key: !secret owm_api_key
+#    mode: hourly
 
 # Text to speech
 tts:
@@ -116,9 +120,9 @@ tts:
 # cloud:
 
 # MQTT
-mqtt:
-  broker: !secret mqtt_broker_ip
-  port: 1883                     # default
+#mqtt:
+#  broker: !secret mqtt_broker_ip
+#  port: 1883                     # default
 
 ################################################
 ## Telegram Bot
@@ -185,37 +189,22 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 
-history_graph:
-  grtemperatur:
-    name: Temperatur
+climate:
+  - platform: climate_group
+    name: "Anbau Gruppe"
     entities:
-      - sensor.anbau_temp
-      - sensor.aussen_temp
-      - sensor.dachstuhl_temp
-      - sensor.keller_temp
-  grluftfeuchtigkeit:
-    name: Luftfeuchtigkeit 
+      - climate.anbau_links
+      - climate.anbau_rechts
+  - platform: climate_group
+    name: "Dach Gruppe"
     entities:
-      - sensor.anbau_rh
-      - sensor.aussen_rh
-      - sensor.dachstuhl_rh
-      - sensor.keller_rh
-  grluftdruck:
-    name: Luftdruck
+      - climate.dach_links
+      - climate.dach_mitte
+      - climate.dach_rechts
+  - platform: climate_group
+    name: "Wohnzimmer Gruppe"
     entities:
-      - sensor.aussen_luftdruck
+#      - climate.wohnzimmer_links
+#      - climate.wohnzimmer_mitte
+      - climate.wohnzimmer_rechts
 
-fritzbox:
-  devices:
-    - host: !secret fritzbox_ip
-      username: !secret fritzbox_user 
-      password: !secret fritzbox_pw
-
-device_tracker:
-  - platform: fritz
-    host: !secret fritzbox_ip
-    username: !secret fritzbox_user 
-    password: !secret fritzbox_pw
-    new_device_defaults:
-      track_new_devices: false
-      hide_if_away: false

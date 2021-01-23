@@ -1,5 +1,9 @@
 - platform: mqtt
   name: "Anbautür"
-  state_topic: "homie/kg_anbau/pulse/active"
+  state_topic: "homie/kg_controller/door/active"
   payload_on: "true"
   payload_off: "false"
+  availability_topic: "homie/kg_controller/$state"
+  payload_available: "ready"
+  payload_not_available: "lost"
+

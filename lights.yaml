@@ -11,25 +11,23 @@
 
 - platform: mqtt
   name: "Lichterkette außen"
-  state_topic: "stat/aussen_lichterkette/POWER"
-  command_topic: "cmnd/aussen_lichterkette/POWER"
-  payload_on: "ON"
-  payload_off: "OFF"
-  availability_topic: "tele/aussen_lichterkette/LWT"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  retain: true
+  state_topic: aussen-lichterkette/relay/0
+  command_topic: aussen-lichterkette/relay/0/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: aussen-lichterkette/status
+  payload_available: 1
+  payload_not_available: 0
 
 - platform: mqtt
   name: "Lichterkette"
-  state_topic: "stat/eg_anbau_lichterkette/POWER"
-  command_topic: "cmnd/eg_anbau_lichterkette/POWER"
-  payload_on: "ON"
-  payload_off: "OFF"
-  availability_topic: "tele/eg_anbau_lichterkette/LWT"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  retain: true
+  state_topic: eg-anbau-lichterkette/relay/0
+  command_topic: eg-anbau-lichterkette/relay/0/set
+  payload_on: 1
+  payload_off: 0
+  availability_topic: eg-anbau-lichterkette/status
+  payload_available: 1
+  payload_not_available: 0
 
 - platform: mqtt
   name: "RGB Dachstuhl" 
@@ -66,33 +64,19 @@
 #  white_value_command_topic: eg-wohnzimmer-h801/channel/3/set
 
 - platform: mqtt
-  name: "RGB Test"
-  state_topic: "stat/test_h801_tasmota/RESULT"
-  command_topic: "cmnd/test_h801_tasmota/POWER"
-  state_value_template: "{{ value_json.POWER }}"
-  brightness_state_topic: "stat/test_h801_tasmota/RESULT"
-  brightness_command_topic: "cmnd/test_h801_tasmota/Dimmer"
-  brightness_scale: 100
-  brightness_value_template: "{{ value_json.Dimmer }}"
-  rgb_state_topic: "stat/test_h801_tasmota/RESULT"
-  rgb_command_topic: "cmnd/test_h801_tasmota/Color2"
-  rgb_command_template: "{{ '%02x%02x%02x' | format(red, green, blue)}}"
-  rgb_value_template: "{% if value_json.Channel%}{{(value_json.Channel[0]*2.55)|int}},{{(value_json.Channel[1]*2.55)|int}},{{(value_json.Channel[2]*2.55)|int}}{%endif%}"
-  effect_state_topic: "stat/test_h801_tasmota/RESULT"
-  effect_command_topic: "cmnd/test_h801_tasmota/Scheme"
-  effect_value_template: "{{ value_json.Scheme }}"
+  name: "Aquariumlicht"
+  state_topic: "homie/eg_aquarium_lampe/leddy/on"
+  command_topic: "homie/eg_aquarium_lampe/leddy/on/set"
+  payload_on: "true"
+  payload_off: "false"
+  effect_state_topic: "homie/eg_aquarium_lampe/leddy/state"
+  effect_command_topic: "homie/eg_aquarium_lampe/leddy/state/set"
   effect_list:
-    - 0
-    - 1
-    - 2
-    - 3
-    - 4
-  availability_topic: "tele/test_h801_tasmota/LWT"
-  payload_available: "Online"
-  payload_not_available: "Offline"
-  qos: 1
-  payload_on: "ON"
-  payload_off: "OFF"
-  optimistic: false
-  retain: true
+    - off
+    - sunny 
+    - sunnyblue
+    - blue
+  availability_topic: "homie/eg_aquarium_lampe/$state"
+  payload_available: "ready"
+  payload_not_available: "lost"
 

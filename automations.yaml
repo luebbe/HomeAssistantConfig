@@ -1,10 +1,5 @@
-################################################
-## Goldene Lampe & Lichterkette
-################################################
-
-- alias: "Goldene Lampe abends an"
-  hide_entity: True
-  trigger: 
+- alias: Goldene Lampe abends an
+  trigger:
     platform: numeric_state
     entity_id: sun.sun
     value_template: '{{ state.attributes.elevation }}'
@@ -12,64 +7,60 @@
   action:
     service: light.turn_on
     entity_id:
-     - light.goldene_lampe
-     - light.lichterkette
-
-- alias: "Goldene Lampe um Mitternacht (0:30) aus"
-  hide_entity: True
+    - light.goldene_lampe
+    - light.lichterkette
+  id: 9efd67c4f6b54be6847683485c78139c
+- alias: Goldene Lampe um Mitternacht (0:30) aus
   trigger:
     platform: time
-    at: "00:30:00"
+    at: 00:30:00
   action:
     service: light.turn_off
     entity_id:
-     - light.goldene_lampe
-     - light.lichterkette
-     - light.lichterkette_aussen
-
-- alias: "Goldene Lampe morgens an (Mo-Fr)"
-  hide_entity: True
+    - light.goldene_lampe
+    - light.lichterkette
+    - light.lichterkette_aussen
+  id: 9851f7f0a2c741d598779717c5e23054
+- alias: Goldene Lampe morgens an (Mo-Fr)
   trigger:
     platform: time
-    at: "06:15:00"
+    at: 06:15:00
   condition:
-    - condition: time
-      weekday:
-        - mon
-        - tue
-        - wed
-        - thu
-        - fri
-    - condition: state
-      entity_id: sun.sun
-      state: "below_horizon"
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
   action:
     service: light.turn_on
     entity_id:
-     - light.goldene_lampe
-     - light.lichterkette_aussen
-
-- alias: "Goldene Lampe morgens an (Sa-So)"
-  hide_entity: True
+    - light.goldene_lampe
+    - light.lichterkette_aussen
+  id: 755784d6443841ff99df511ecd591e88
+- alias: Goldene Lampe morgens an (Sa-So)
   trigger:
     platform: time
-    at: "09:00:00"
+    at: 09:00:00
   condition:
-    - condition: time
-      weekday:
-        - sat
-        - sun
-    - condition: state
-      entity_id: sun.sun
-      state: "below_horizon"
+  - condition: time
+    weekday:
+    - sat
+    - sun
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
   action:
     service: light.turn_on
     entity_id:
-     - light.goldene_lampe
-     - light.lichterkette_aussen
-
-- alias: "Goldene Lampe nach Sonnenaufgang aus"
-  hide_entity: True
+    - light.goldene_lampe
+    - light.lichterkette_aussen
+  id: 8e7897fa3121481da73a48dc7c6fc625
+- alias: Goldene Lampe nach Sonnenaufgang aus
   trigger:
     platform: numeric_state
     entity_id: sun.sun
@@ -78,11 +69,10 @@
   action:
     service: light.turn_off
     entity_id:
-     - light.goldene_lampe
-
-- alias: "Lichterkette abends an"
-  hide_entity: True
-  trigger: 
+    - light.goldene_lampe
+  id: da2b1f11764548168012aee4688a4807
+- alias: Lichterkette abends an
+  trigger:
     platform: numeric_state
     entity_id: sun.sun
     value_template: '{{ state.attributes.elevation }}'
@@ -90,10 +80,9 @@
   action:
     service: light.turn_on
     entity_id:
-     - light.lichterkette_aussen
-
-- alias: "Lichterkette außen nach Sonnenaufgang aus"
-  hide_entity: True
+    - light.lichterkette_aussen
+  id: 5108f2c96e774cefa6745d146440cca4
+- alias: Lichterkette außen nach Sonnenaufgang aus
   trigger:
     platform: numeric_state
     entity_id: sun.sun
@@ -102,289 +91,295 @@
   action:
     service: light.turn_off
     entity_id:
-     - light.lichterkette_aussen
-
-################################################
-## Anbautür nach 22 Uhr offen
-################################################
-
-- alias: "Anbautür zwischen 22 und 6 Uhr offen"
-  hide_entity: True
+    - light.lichterkette_aussen
+  id: 9a1595838c76436b81c51ab4318ebc82
+- id: 6860c29a3913408c9a6d09f0d774a191
+  alias: Anbautür zwischen 22 und 6 Uhr offen
   trigger:
   - platform: state
     entity_id: binary_sensor.anbautur
     to: 'on'
+    for: 00:00:10
+    from: 'off'
   - platform: time
     at: '22:00:00'
   condition:
+  - condition: time
+    after: '21:59:59'
+    before: 06:00:00
   - condition: state
     entity_id: binary_sensor.anbautur
     state: 'on'
-  - condition: time
-    after: '21:59:00'
-    before: '06:00:00'
   action:
   - service: notify.all
     data:
-      title: "\U0001F6AA Anbautür abschließen!"
-      message: "Es ist zwischen 22 und 6 Uhr. Bitte die Anbautür abschließen."
-
-- alias: "Anbautür zwischen 22 und 6 Uhr wieder abgeschlossen"
-  hide_entity: true
+      title: 🚪 Anbautür abschließen!
+      message: Es ist zwischen 22 und 6 Uhr. Bitte die Anbautür abschließen.
+  mode: single
+- id: 304d25cdde2f41ccb031ca0b29f14b00
+  alias: Anbautür zwischen 22 und 6 Uhr wieder abgeschlossen
   trigger:
   - platform: state
     entity_id: binary_sensor.anbautur
     to: 'off'
+    for: 00:00:10
+    from: 'on'
   condition:
   - condition: state
     entity_id: binary_sensor.anbautur
     state: 'off'
   - condition: time
-    after: '21:59:00'
-    before: '06:00:00'
+    after: '21:59:59'
+    before: 06:00:00
   action:
   - service: notify.all
     data:
-      title: "\U0001F6AA Erledigt!"
-      message: "Danke \U0001F44D"
-
-################################################
-## Statuswechsel der Waschmaschine
-################################################
-
-# When power is detected, and the washing machine is not in 
-# the Running state, change the status of the washing machine
-# to Running. 
-# The status check will ensure we don't try to put the state 
-# to Running each time the power level changes, and we're already
-# in the Running state.
-
-- alias: Set washing machine idle 
-  hide_entity: true
+      title: 🚪 Erledigt!
+      message: Danke 👍
+  mode: single
+- id: fe0c8fdfa4aa47f08c642f829fd8cbc0
+  alias: Set washing machine idle
   trigger:
-    platform: mqtt
-    topic: 'stat/eg_waschmaschine/POWER'
-    payload: 'ON'
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.washing_machine_status
-        option: Leerlauf
-
-- alias: Set washing machine off
-  hide_entity: true
-  trigger:
-    platform: mqtt
-    topic: 'stat/eg_waschmaschine/POWER'
-    payload: 'OFF'
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.washing_machine_status
-        option: Aus
-
-- alias: Set washing machine active when power detected
-  hide_entity: true
-  trigger:
-    - platform: numeric_state
-      entity_id: sensor.waschmaschine_statistik
-      above: 30
+  - platform: mqtt
+    topic: eg-waschmaschine/relay/0
+    payload: '1'
   condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: input_select.washing_machine_status
-        state: Aus
-      - condition: state
-        entity_id: input_select.washing_machine_status
-        state: Leerlauf
-      - condition: state
-        entity_id: input_select.washing_machine_status
-        state: Fertig
-#      - condition: state
-#        entity_id: input_select.washing_machine_status
-#        state: Endphase
+  - condition: state
+    entity_id: input_select.washing_machine_status
+    state: Aus
   action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.washing_machine_status
-        option: Wäscht
-
-# When the power drops, move the state of the washing machine to 
-# Fertig (Finishing).
-
-- alias: Set washing machine finished when power drops
-  hide_entity: true
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.washing_machine_status
+      option: Leerlauf
+    entity_id: input_select.washing_machine_status
+  mode: single
+- id: 153c184d13e342c580453cf688749801
+  alias: Set washing machine off
   trigger:
-    - platform: numeric_state
-      entity_id: sensor.waschmaschine_statistik
-      below: 10
+  - platform: mqtt
+    topic: eg-waschmaschine/relay/0
+    payload: '0'
+  action:
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.washing_machine_status
+      option: Aus
+  mode: single
+- id: 990313720057460ab5a0fa916c0c8f39
+  alias: Set washing machine active when power detected
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.waschmaschine_statistik
+    above: '30'
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_select.washing_machine_status
+      state: Aus
+    - condition: state
+      entity_id: input_select.washing_machine_status
+      state: Leerlauf
+    - condition: state
+      entity_id: input_select.washing_machine_status
+      state: Fertig
+  action:
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.washing_machine_status
+      option: Wäscht
+    entity_id: input_select.washing_machine_status
+  mode: single
+- id: f53ced8413c84fe08d47725f362e77a3
+  alias: Set washing machine finished when power drops
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.waschmaschine_statistik
+    below: '10'
+  condition:
+  - condition: state
+    entity_id: input_select.washing_machine_status
+    state: Wäscht
+  action:
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.washing_machine_status
+      option: Fertig
+    entity_id: input_select.washing_machine_status
+  mode: single
+- alias: Send alert when washing machine has finished
+  trigger:
+  - platform: state
+    entity_id: input_select.washing_machine_status
+    to: Fertig
+  action:
+  - service: notify.all
+    data:
+      title: 👕 Waschmaschine fertig
+      message: Bitte die Wäsche aufhängen!
+  id: 1f16c3a51e81484aa2423adcf4bf316a
+- id: 5791211563e343dabeec9d877077a12d
+  alias: Send alert when washing machine has been turned off after finishing
+  trigger:
+  - platform: state
+    entity_id: input_select.washing_machine_status
+    from: Fertig
+    to: Aus
+  action:
+  - service: notify.all
+    data:
+      title: 👕 Waschmaschine ausgeschaltet
+      message: Danke 👍
+  mode: single
+- alias: Display morgens (6:30) an
+  trigger:
+    platform: time
+    at: 06:30:00
+  action:
+  - service: mqtt.publish
+    data:
+      topic: homie/eg_kueche_display/Display/on/set
+      payload: 'true'
+  id: b00117a156784acf82dbb2c522defd63
+- alias: Display um Mitternacht (0:30) aus
+  trigger:
+    platform: time
+    at: 00:30:00
+  action:
+  - service: mqtt.publish
+    data:
+      topic: homie/eg_kueche_display/Display/on/set
+      payload: 'false'
+  id: 49af0385343e495387035b335155dfad
+- alias: Fenster im Dachstuhl öffnen
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.delta_temp_aussen_dach
+    below: -2
+    for:
+      minutes: 10
   condition:
     condition: and
     conditions:
-      - condition: state
-        entity_id: input_select.washing_machine_status
-        state: Wäscht
+    - condition: numeric_state
+      entity_id: sensor.aussen_temp
+      above: 21
+    - condition: state
+      entity_id: input_select.dachstuhl_fenster
+      state: geschlossen
   action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.washing_machine_status
-#        option: Endphase
-        option: Fertig
-
-# Wait 5 minutes for us to be in the Finishing state before we
-# decide the washing machine has finished. This way, if the 
-# washing machine is in between cycles and the power drops, we 
-# won't mark the washing machine cycle as finished too early.
-
-#- alias: Set washing machine clean after timeout
-#  hide_entity: true
-#  trigger:
-#    - platform: state
-#      entity_id: input_select.washing_machine_status
-#      to: Endphase
-#      for:
-#        minutes: 5
-#  condition:
-#    condition: and
-#    conditions:
-#      - condition: state
-#        entity_id: input_select.washing_machine_status
-#        state: Endphase
-#  action:
-#    - service: input_select.select_option
-#      data:
-#        entity_id: input_select.washing_machine_status
-#        option: Fertig
-
-# Send notification when the washing machine has finished
-#
-#
-#
-
-- alias: Send alert when washing machine has finished
-  hide_entity: true
+  - service: notify.all
+    data_template:
+      title: 🌡 Dachstuhlfenster öffnen
+      message: Draußen ({{ states.sensor.aussen_temp.state }}°) ist es kühler als
+        drinnen ({{ states.sensor.dachstuhl_temp.state }}°)
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.dachstuhl_fenster
+      option: offen
+  id: 3cd08edc5f4a420e95b6521d1129b23a
+- alias: Fenster im Dachstuhl schließen
   trigger:
-    - platform: state
-      entity_id: input_select.washing_machine_status
-      to: Fertig
- # condition:
- #   condition: and
- #   conditions:
- #     - condition: state
- #       entity_id: input_select.washing_machine_status
- #       state: Fertig
-  action:
-    - service: notify.all
-      data:
-        title: "\U0001F455 Waschmaschine fertig"
-        message: "Bitte die Wäsche aufhängen!"
-
-- alias: Send alert when washing machine has been turned off after finishing 
-  hide_entity: true
-  trigger:
-    - platform: state
-      entity_id: input_select.washing_machine_status
-      from: Fertig
-      to: Aus
-  action:
-    - service: notify.all
-      data:
-        title: "\U0001F455 Waschmaschine ausgeschaltet"
-        message: "Danke \U0001F44D"
-
-################################################
-## Aktualisierung für Home Assistant
-################################################
-
-#- alias: 'Update Available Notifications'
-#  trigger:
-#    entity_id: updater.updater
-#  action:
-#    service: notify.user1
-#    data:
-#      message: "Home Assistant {{ states('updater.updater') }} is now available."
-
-################################################
-## Display in Küche nachts aus und morgens anschalten
-################################################
-
-- alias: "Display morgens (6:30) an"
-  hide_entity: True
-  trigger:
-    platform: time
-    at: "06:30:00"
-  action:
-    - service: mqtt.publish
-      data: 
-        topic: "homie/eg_kueche_display/Display/on/set"
-        payload: "true"
-
-- alias: "Display um Mitternacht (0:30) aus"
-  hide_entity: True
-  trigger:
-    platform: time
-    at: "00:30:00"
-  action:
-    - service: mqtt.publish
-      data: 
-        topic: "homie/eg_kueche_display/Display/on/set"
-        payload: "false"
-
-################################################
-## Dachstuhl lüften
-################################################
-
-- alias: 'Fenster im Dachstuhl öffnen'
-  hide_entity: True
-  trigger: 
-    - platform: numeric_state
-      entity_id: sensor.delta_temp_aussen_dach
-      below: -2
-      for:
-        minutes: 10
+  - platform: numeric_state
+    entity_id: sensor.delta_temp_aussen_dach
+    above: 0
+    for:
+      minutes: 10
   condition:
-    condition: and 
+    condition: and
     conditions:
-      - condition: numeric_state
-        entity_id: sensor.aussen_temp 
-        above: 21
-      - condition: state
-        entity_id: input_select.dachstuhl_fenster
-        state: geschlossen
+    - condition: numeric_state
+      entity_id: sensor.aussen_temp
+      above: 21
+    - condition: state
+      entity_id: input_select.dachstuhl_fenster
+      state: offen
   action:
-    - service: notify.user1
-      data_template:
-        title: "\U0001F321 Dachstuhlfenster öffnen"
-        message: 'Draußen ({{ states.sensor.aussen_temp.state }}°) ist es kühler als drinnen ({{ states.sensor.dachstuhl_temp.state }}°)'
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.dachstuhl_fenster
-        option: offen
-
-- alias: 'Fenster im Dachstuhl schließen'
-  hide_entity: True
-  trigger: 
-    - platform: numeric_state
-      entity_id: sensor.delta_temp_aussen_dach
-      above: 0
-      for:
-        minutes: 10
+  - service: notify.all
+    data_template:
+      title: 🌡 Dachstuhlfenster schließen
+      message: Draußen ({{ states.sensor.aussen_temp.state }}°) ist es wärmer als
+        drinnen ({{ states.sensor.dachstuhl_temp.state }}°)
+  - service: input_select.select_option
+    data:
+      entity_id: input_select.dachstuhl_fenster
+      option: geschlossen
+  id: 71b4f5aa39e042ea9e28572f0520fb67
+- id: '1590257621105'
+  alias: Aquariumlicht um 22 Uhr aus
+  description: ''
+  trigger:
+  - at: '22:00'
+    platform: time
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.aquariumlicht
+    service: light.turn_off
+- id: '1590257862404'
+  alias: Aquariumlicht um 20 Uhr blue
+  description: ''
+  trigger:
+  - at: '20:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      payload: blue
+      topic: homie/eg_aquarium_lampe/leddy/state/set
+    service: mqtt.publish
+- id: '1590258208709'
+  alias: Aquariumlicht um 07 Uhr sunny
+  description: ''
+  trigger:
+  - at: '7:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      payload: sunny
+      topic: homie/eg_aquarium_lampe/leddy/state/set
+    service: mqtt.publish
+  mode: single
+- id: '1590258295683'
+  alias: Aquariumlicht um 10 Uhr aus
+  description: ''
+  trigger:
+  - at: '10:00'
+    platform: time
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.aquariumlicht
+    service: light.turn_off
+- id: '1590258526885'
+  alias: Aquariumlicht um 16 Uhr sunnyblue
+  description: ''
+  trigger:
+  - at: '16:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      payload: sunnyblue
+      topic: homie/eg_aquarium_lampe/leddy/state/set
+    service: mqtt.publish
+- id: '1600619530738'
+  alias: Ventilsteuerung Sprühschlauch
+  description: ''
+  trigger:
+  - platform: time
+    at: '8:00'
   condition:
-    condition: and 
-    conditions:
-      - condition: numeric_state
-        entity_id: sensor.aussen_temp 
-        above: 21
-      - condition: state
-        entity_id: input_select.dachstuhl_fenster
-        state: offen
+  - condition: numeric_state
+    entity_id: sensor.smart_irrigation_daily_adjusted_run_time
+    above: '0'
   action:
-    - service: notify.user1
-      data_template:
-        title: "\U0001F321 Dachstuhlfenster schließen"
-        message: 'Draußen ({{ states.sensor.aussen_temp.state }}°) ist es wärmer als drinnen ({{ states.sensor.dachstuhl_temp.state }}°)'
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.dachstuhl_fenster
-        option: geschlossen
+  - service: notify.user1
+    data:
+      message: '{{states("sensor.smart_irrigation_daily_adjusted_run_time")}} Sekunden'
+      title: Bewässerung
+  - service: smart_irrigation.spruehschlauch_reset_bucket
+    data: {}
+  mode: single

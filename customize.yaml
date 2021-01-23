@@ -4,5 +4,5 @@ binary_sensor.anbautur:
 sensor.waschmaschine_status:
   icon: mdi:washing-machine
 
-sensor.waschmaschine_aktuell:
+sensor.waschmaschine_power:
   icon: mdi:flash
