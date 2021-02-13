@@ -227,30 +227,47 @@
       unique_id: "Anbau Gruppe Temp"
       unit_of_measurement: '°C'
       value_template: "{{ state_attr('climate.anbau_gruppe', 'current_temperature')}}"
+    arbeitszimmer_temp:
+      friendly_name: "Arbeitszimmer Temp"
+      unique_id: "Arbeitszimmer Temp"
+      unit_of_measurement: '°C'
+      value_template: "{{ state_attr('climate.arbeitszimmer', 'current_temperature')}}"
     dach_gruppe_temp:
       friendly_name: "Dach Gruppe Temp"
       unique_id: "Dach Gruppe Temp"
       unit_of_measurement: '°C'
       value_template: "{{ state_attr('climate.dach_gruppe', 'current_temperature')}}"
-    wohnzimmer_gruppe_temp:
-      friendly_name: "Wohnzimmer Gruppe Temp"
-      unique_id: "Wohnzimmer Gruppe Temp"
-      unit_of_measurement: '°C'
-      value_template: "{{ state_attr('climate.wohnzimmer_gruppe', 'current_temperature')}}"
+#    wohnzimmer_gruppe_temp:
+#      friendly_name: "Wohnzimmer Gruppe Temp"
+#      unique_id: "Wohnzimmer Gruppe Temp"
+#      unit_of_measurement: '°C'
+#      value_template: "{{ state_attr('climate.wohnzimmer_gruppe', 'current_temperature')}}"
 
     anbau_gruppe_soll:
       friendly_name: "Anbau Gruppe Soll"
       unique_id: "Anbau Gruppe Soll"
       unit_of_measurement: '°C'
       value_template: "{{ state_attr('climate.anbau_gruppe', 'temperature')}}"
+    arbeitszimmer_soll:
+      friendly_name: "Arbeitszimmer Soll"
+      unique_id: "Arbeitszimmer Soll"
+      unit_of_measurement: '°C'
+      value_template: "{{ state_attr('climate.arbeitszimmer', 'temperature')}}"
     dach_gruppe_soll:
       friendly_name: "Dach Gruppe Soll"
       unique_id: "Dach Gruppe Soll"
       unit_of_measurement: '°C'
       value_template: "{{ state_attr('climate.dach_gruppe', 'temperature')}}"
-    wohnzimmer_gruppe_soll:
-      friendly_name: "Wohnzimmer Gruppe Soll"
-      unique_id: "Wohnzimmer Gruppe Soll"
-      unit_of_measurement: '°C'
-      value_template: "{{ state_attr('climate.wohnzimmer_gruppe', 'temperature')}}"
+#    wohnzimmer_gruppe_soll:
+#      friendly_name: "Wohnzimmer Gruppe Soll"
+#      unique_id: "Wohnzimmer Gruppe Soll"
+#      unit_of_measurement: '°C'
+#      value_template: "{{ state_attr('climate.wohnzimmer_gruppe', 'temperature')}}"
 
+################################################
+## Müllabfuhr 
+################################################
+
+- platform: waste_collection_schedule
+  name: Muellabfuhr
+  value_template: '{{value.types|join(", ")}}|{{value.daysTo}}|{{value.date.strftime("%d.%m.%Y")}}|{{value.date.strftime("%a")}}'

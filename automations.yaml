@@ -330,12 +330,19 @@
       topic: homie/eg_aquarium_lampe/leddy/state/set
     service: mqtt.publish
 - id: '1590258208709'
-  alias: Aquariumlicht um 07 Uhr sunny
+  alias: Aquariumlicht um 07 Uhr sunny (Mo-Fr)
   description: ''
   trigger:
   - at: '7:00'
     platform: time
-  condition: []
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
   action:
   - data:
       payload: sunny
@@ -382,4 +389,36 @@
       title: Bewässerung
   - service: smart_irrigation.spruehschlauch_reset_bucket
     data: {}
+  mode: single
+- id: '1611408575875'
+  alias: Aquariumlicht um 09 Uhr sunny (Sa-So)
+  description: ''
+  trigger:
+  - platform: time
+    at: '9:00'
+  condition:
+  - condition: time
+    weekday:
+    - sat
+    - sun
+  action:
+  - service: mqtt.publish
+    data:
+      payload: sunny
+      topic: homie/eg_aquarium_lampe/leddy/state/set
+  mode: single
+- id: '1612706630945'
+  alias: Mültonne rausstellen
+  description: ''
+  trigger:
+  - platform: time
+    at: '18:00:00'
+  condition:
+  - condition: template
+    value_template: '{{ states("sensor.muellabfuhr").split("|")[1] == "1" }}'
+  action:
+  - service: notify.all
+    data:
+      title: 🗑 Morgen ist Müllabfuhr
+      message: Bitte den {{ states("sensor.muellabfuhr").split("|")[0]}} rausstellen
   mode: single

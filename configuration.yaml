@@ -189,6 +189,10 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 
+################################################
+## Climate Gruppen
+################################################
+
 climate:
   - platform: climate_group
     name: "Anbau Gruppe"
@@ -201,10 +205,20 @@ climate:
       - climate.dach_links
       - climate.dach_mitte
       - climate.dach_rechts
-  - platform: climate_group
-    name: "Wohnzimmer Gruppe"
-    entities:
+#  - platform: climate_group
+#    name: "Wohnzimmer Gruppe"
+#    entities:
 #      - climate.wohnzimmer_links
 #      - climate.wohnzimmer_mitte
-      - climate.wohnzimmer_rechts
+#      - climate.wohnzimmer_rechts
+
+################################################
+## Müllabführ 
+################################################
+
+waste_collection_schedule:
+  sources:
+    - name: ics
+      args:
+        url: !secret waste_url
 
